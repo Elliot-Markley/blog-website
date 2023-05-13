@@ -7,11 +7,11 @@
 
 <% posts.forEach(post => { %>
 <h1>
-  <%= post.postTitle %>
+  <%= post.title %>
 </h1>
 <p>
-  <%= truncate(post.postBody, {"length": 104, "omission": " ..."}) %>
-  <a href="./posts/<%= post.postTitle %>"> Read More </a>
+  <%= truncate(post.content, {"length": 104, "omission": " ..."}) %>
+  <a href="./posts/<%= post.title %>"> Read More </a>
 </p>
 <% }); %>
 

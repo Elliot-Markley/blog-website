@@ -5,9 +5,10 @@ import bodyParser from "body-parser";
 import kebabCase from "lodash/kebabCase.js";
 import truncate from "lodash/truncate.js";
 import { homeContent, aboutContent, contactContent } from "./content.js";
-
+import mongoose, { Schema } from "mongoose";
 import dotenv from 'dotenv';
 dotenv.config();
+
 
 const app = express();
 
@@ -16,16 +17,40 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-let posts = [];
+// Connect to MongoDB Atlas
+
+main().catch(err => console.log(err));
+async function main() {
+  await mongoose.connect("mongodb+srv://" + process.env.MongoDBAtlas_Username + ":" + process.env.MongoDBAtlas_Password + "@cluster0.zoon73x.mongodb.net/blogpostDB")
+};
+
+const postSchema = new Schema({
+  title: String,
+  content: String
+});
+
+const Post = new mongoose.model('Post', postSchema);
+
+// Favicon added to DB fix
+
+app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // Home Route
 
 app.get("/", (req, res) => {
-  res.render("home", {
-    homeContent: homeContent,
-    posts: posts,
-    truncate: truncate,
-  });
+
+  Post.find()
+    .then((foundPosts) => {
+      res.render("home", {
+        homeContent: homeContent,
+        posts: foundPosts,
+        truncate: truncate,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
 });
 
 // About Route
