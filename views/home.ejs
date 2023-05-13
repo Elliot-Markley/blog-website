@@ -1,0 +1,18 @@
+<%- include("partials/header") -%>
+
+<h1>Home</h1>
+<p>
+  <%= homeContent %>
+</p>
+
+<% posts.forEach(post => { %>
+<h1>
+  <%= post.postTitle %>
+</h1>
+<p>
+  <%= truncate(post.postBody, {"length": 104, "omission": " ..."}) %>
+  <a href="./posts/<%= post.postTitle %>"> Read More </a>
+</p>
+<% }); %>
+
+<%- include("partials/footer") -%>
