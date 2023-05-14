@@ -11,7 +11,7 @@
 </h1>
 <p>
   <%= truncate(post.content, {"length": 104, "omission": " ..."}) %>
-  <a href="./posts/<%= post.title %>"> Read More </a>
+  <a href="./posts/<%= post._id %>"> Read More </a>
 </p>
 <% }); %>
 

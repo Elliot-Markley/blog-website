@@ -77,20 +77,15 @@ app.post("/compose", (req, res) => {
 });
 
 // Render the requested post
-app.get("/posts/:postName", (req, res) => {
-  const requestedTitle = req.params.postName;
+app.get("/posts/:postId", (req, res) => {
+  const requestedPost = req.params.postId;
 
-  Post.findOne({ title: requestedTitle })
+  Post.findOne({ _id: requestedPost })
     .then((foundPost) => {
-      const storedTitle = foundPost.title;
-      if (storedTitle === requestedTitle) {
-        res.render("post", {
-          postTitle: foundPost.title,
-          postBody: foundPost.content,
-        });
-      } else {
-        res.redirect('/');
-      }
+      res.render("post", {
+        postTitle: foundPost.title,
+        postBody: foundPost.content,
+      });
     })
     .catch((err) => {
       console.log(err);
