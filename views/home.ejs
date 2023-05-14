@@ -12,7 +12,7 @@
 <p>
   <%= truncate(post.content, {"length": 104, "omission": " ..."}) %>
 </p>
-<form action="/posts/<%= post._id %>" method="POST">
+<form action="/posts/<%= post._id %>" method="post">
   <button class="btn btn-primary btn-sm" type="submit">Read More</button>
 </form>
 <% }); %>

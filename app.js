@@ -79,7 +79,7 @@ app.get("/delete", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-    })
+    });
 });
 
 // Render the requested post
@@ -115,10 +115,8 @@ app.post("/delete", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-    })
-})
-
-
+    });
+});
 
 // Start the server on port 3000
 app.listen(3000, function () {
