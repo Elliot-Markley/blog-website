@@ -11,8 +11,10 @@
 </h1>
 <p>
   <%= truncate(post.content, {"length": 104, "omission": " ..."}) %>
-  <a href="./posts/<%= post._id %>"> Read More </a>
 </p>
+<form action="/posts/<%= post._id %>" method="POST">
+  <button class="btn btn-primary btn-sm" type="submit">Read More</button>
+</form>
 <% }); %>
 
 <%- include("partials/footer") -%>

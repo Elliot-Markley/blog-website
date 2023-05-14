@@ -1,0 +1,15 @@
+<%- include("partials/header") -%>
+
+<form action="/delete" method="post">
+  <% posts.forEach(post => { %>
+  <h1>
+    <%= post.title %>
+  </h1>
+  <p>
+    <%= truncate(post.content, {"length": 104, "omission": " ..."}) %>
+  </p>
+  <button class="btn btn-danger btn-sm" type="submit" name="delete">Delete Post</button>
+  <% }); %>
+</form>
+
+<%- include("partials/footer") -%>

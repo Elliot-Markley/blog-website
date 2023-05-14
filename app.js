@@ -67,20 +67,26 @@ app.get("/compose", (req, res) => {
   res.render("compose");
 });
 
-// Create a new post
-app.post("/compose", (req, res) => {
-  const title = req.body.newPostTitle;
-  const content = req.body.newPostBody;
-
-  Post.create({ title: title, content: content });
-  res.redirect("/");
+// Render the delete page
+app.get("/delete", (req, res) => {
+  Post.find()
+    .then((foundPosts) => {
+      res.render("delete", {
+        homeContent: homeContent,
+        posts: foundPosts,
+        truncate: truncate
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 });
 
 // Render the requested post
-app.get("/posts/:postId", (req, res) => {
-  const requestedPost = req.params.postId;
+app.post("/posts/:postId", (req, res) => {
+  const requestedPostId = req.params.postId;
 
-  Post.findOne({ _id: requestedPost })
+  Post.findById(requestedPostId)
     .then((foundPost) => {
       res.render("post", {
         postTitle: foundPost.title,
@@ -89,8 +95,30 @@ app.get("/posts/:postId", (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-    })
+    });
 });
+
+// Create a new post
+app.post("/compose", (req, res) => {
+  const title = req.body.newPostTitle;
+  const content = req.body.newPostBody;
+
+  Post.create({ title: title, content: content });
+  res.redirect("/compose");
+});
+
+// Delete a post
+app.post("/delete", (req, res) => {
+  Post.findOneAndRemove()
+    .then(() => {
+      res.redirect("/delete");
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+})
+
+
 
 // Start the server on port 3000
 app.listen(3000, function () {
