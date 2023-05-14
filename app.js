@@ -1,8 +1,5 @@
-//jshint esversion:6
-
 import express from "express";
 import bodyParser from "body-parser";
-import kebabCase from "lodash/kebabCase.js";
 import truncate from "lodash/truncate.js";
 import { homeContent, aboutContent, contactContent } from "./content.js";
 import mongoose, { Schema } from "mongoose";
@@ -37,8 +34,7 @@ app.get("/", (req, res) => {
       res.render("home", {
         homeContent: homeContent,
         posts: foundPosts,
-        truncate: truncate,
-        kebabCase: kebabCase
+        truncate: truncate
       });
     })
     .catch((err) => {
