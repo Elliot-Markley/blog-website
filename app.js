@@ -36,8 +36,8 @@ const Post = new mongoose.model('Post', postSchema);
 app.get('/favicon.ico', (req, res) => res.status(204).end());
 
 // Render the home page
+// This route is used to view all the posts
 app.get("/", (req, res) => {
-
   // Find all the posts in the database
   Post.find()
     .then((foundPosts) => {
@@ -63,26 +63,50 @@ app.get("/contact", (req, res) => {
 });
 
 // Render the compose page
-app.get("/compose", (req, res) => {
-  res.render("compose");
-});
+// This route is used to create a new post
+app.route("/compose")
+  .get((req, res) => {
+    res.render("compose");
+  })
+  // Create a new post
+  .post((req, res) => {
+    const title = req.body.newPostTitle;
+    const content = req.body.newPostBody;
+
+    Post.create({ title: title, content: content });
+    res.redirect("/compose");
+  });
 
 // Render the delete page
-app.get("/delete", (req, res) => {
-  Post.find()
-    .then((foundPosts) => {
-      res.render("delete", {
-        homeContent: homeContent,
-        posts: foundPosts,
-        truncate: truncate
+// This route is used to delete a post
+app.route("/delete")
+  // Find all the posts in the database
+  .get((req, res) => {
+    Post.find()
+      .then((foundPosts) => {
+        res.render("delete", {
+          homeContent: homeContent,
+          posts: foundPosts,
+          truncate: truncate
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+  })
+  // Delete the requested post
+  .post((req, res) => {
+    Post.findOneAndRemove()
+      .then(() => {
+        res.redirect("/delete");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
 
 // Render the requested post
+// This route is used to view a post
 app.post("/posts/:postId", (req, res) => {
   const requestedPostId = req.params.postId;
 
@@ -92,26 +116,6 @@ app.post("/posts/:postId", (req, res) => {
         postTitle: foundPost.title,
         postBody: foundPost.content,
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-// Create a new post
-app.post("/compose", (req, res) => {
-  const title = req.body.newPostTitle;
-  const content = req.body.newPostBody;
-
-  Post.create({ title: title, content: content });
-  res.redirect("/compose");
-});
-
-// Delete a post
-app.post("/delete", (req, res) => {
-  Post.findOneAndRemove()
-    .then(() => {
-      res.redirect("/delete");
     })
     .catch((err) => {
       console.log(err);
